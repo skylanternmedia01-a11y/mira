@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mira — Find the Right Migration Agent | Get 3 Free Quotes</title>
+  <meta name="description" content="Answer 5 questions about your visa situation. Get matched with 3 MARA-registered migration agents who specialise in your case. Free for applicants." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #FAF7F2;
+      color: #2C2C2C;
+      line-height: 1.6;
+    }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .fade-up  { animation: fadeUp  0.6s ease both; }
+    .slide-in { animation: slideIn 0.5s ease both; }
+
+    /* Nav */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(250,247,242,0.85);
+      border-bottom: 1px solid rgba(196,98,58,0.12);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .logo-circle {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: #C4623A;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .logo-wordmark {
+      font-family: 'Fraunces', serif; font-weight: 600;
+      font-size: 22px; color: #2C2C2C; letter-spacing: -0.02em;
+    }
+    .nav-cta {
+      background: #C4623A; color: #fff;
+      border: none; border-radius: 8px;
+      padding: 10px 20px; font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .nav-cta:hover { background: #A84E2B; }
+
+    /* Buttons */
+    .cta-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 14px 28px; border-radius: 10px;
+      font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
+      cursor: pointer; border: none; transition: all 0.2s;
+      text-decoration: none;
+    }
+    .cta-btn-primary {
+      background: #C4623A; color: #fff;
+    }
+    .cta-btn-primary:hover { background: #A84E2B; transform: translateY(-1px); }
+    .cta-btn-outline {
+      background: transparent; color: #C4623A;
+      border: 2px solid #C4623A;
+    }
+    .cta-btn-outline:hover { background: #C4623A; color: #fff; transform: translateY(-1px); }
+    .cta-btn-dark {
+      background: #fff; color: #2C2C2C;
+    }
+    .cta-btn-dark:hover { background: #E8E4DF; }
+
+    /* Option buttons (form) */
+    .option-btn {
+      background: #fff; border: 2px solid #E8E4DF;
+      border-radius: 10px; padding: 12px 16px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+      color: #2C2C2C; cursor: pointer; text-align: left;
+      transition: all 0.18s; display: flex; align-items: center; gap: 10px;
+      width: 100%;
+    }
+    .option-btn:hover { border-color: #C4623A; background: #FAF7F2; }
+    .option-btn.selected { border-color: #C4623A; background: #FDF2ED; color: #C4623A; font-weight: 600; }
+
+    /* Section wrapper */
+    .section { padding: 80px 24px; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+
+    /* Hero */
+    .hero {
+      padding: 80px 24px 64px;
+      background: #FAF7F2;
+    }
+    .hero-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #EBF5ED; color: #3D7A4A;
+      padding: 6px 14px; border-radius: 20px;
+      font-size: 13px; font-weight: 600; margin-bottom: 20px;
+    }
+    .hero-badge::before {
+      content: '✓'; display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; background: #3D7A4A; color: #fff;
+      border-radius: 50%; font-size: 11px; font-weight: 700; flex-shrink: 0;
+    }
+    .hero-h1 {
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15;
+      color: #2C2C2C; margin-bottom: 20px; letter-spacing: -0.02em;
+    }
+    .hero-h1 em { color: #C4623A; font-style: normal; }
+    .hero-sub {
+      font-size: 17px; color: #6B6560; line-height: 1.7;
+      margin-bottom: 32px; max-width: 460px;
+    }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+    .trust-badges { display: flex; gap: 24px; flex-wrap: wrap; }
+    .trust-badge {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; color: #6B6560; font-weight: 500;
+    }
+    .trust-badge-icon { color: #3D7A4A; font-size: 15px; }
+
+    /* Hero card */
+    .hero-card {
+      background: #fff; border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(44,44,44,0.10);
+      padding: 32px; border: 1px solid #E8E4DF;
+    }
+    .hero-card-title {
+      font-family: 'Fraunces', serif; font-weight: 600;
+      font-size: 20px; margin-bottom: 24px; color: #2C2C2C;
+    }
+    .hero-card-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px 0; border-bottom: 1px solid #F0EDE8;
+    }
+    .hero-card-item:last-child { border-bottom: none; }
+    .hero-card-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .icon-terra { background: #FDF2ED; }
+    .icon-green { background: #EBF5ED; }
+    .icon-blue  { background: #EDF3FD; }
+    .icon-gray  { background: #F2F0EC; }
+    .hero-card-label { font-size: 13px; color: #6B6560; margin-bottom: 2px; }
+    .hero-card-name  { font-weight: 600; font-size: 15px; color: #2C2C2C; }
+
+    /* Trust bar */
+    .trust-bar {
+      background: #2C2C2C; padding: 20px 24px;
+    }
+    .trust-bar-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+    }
+    .trust-bar-item {
+      display: flex; align-items: center; gap: 10px;
+      color: #fff; font-size: 14px; font-weight: 500;
+    }
+    .trust-bar-num {
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: 18px; color: #E8D5CB;
+    }
+
+    /* How it works */
+    .how-title {
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      text-align: center; margin-bottom: 12px; letter-spacing: -0.02em;
+    }
+    .how-sub {
+      text-align: center; color: #6B6560; font-size: 16px;
+      margin-bottom: 48px;
+    }
+    .how-cards {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 24px;
+    }
+    .how-card {
+      background: #fff; border-radius: 16px;
+      padding: 32px; border: 1px solid #E8E4DF;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .how-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(44,44,44,0.10); }
+    .how-step {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: 20px; color: #fff; margin-bottom: 20px;
+    }
+    .step-terra  { background: #C4623A; }
+    .step-green  { background: #3D7A4A; }
+    .step-dark   { background: #2C2C2C; }
+    .how-card-title {
+      font-family: 'Fraunces', serif; font-weight: 600;
+      font-size: 18px; margin-bottom: 10px; color: #2C2C2C;
+    }
+    .how-card-desc { font-size: 14px; color: #6B6560; line-height: 1.65; }
+
+    /* Comparison table */
+    .compare-section { background: #fff; }
+    .compare-title {
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      text-align: center; margin-bottom: 8px;
+    }
+    .compare-sub {
+      text-align: center; color: #6B6560; font-size: 15px; margin-bottom: 40px;
+    }
+    .compare-table {
+      width: 100%; border-collapse: collapse;
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid #E8E4DF;
+    }
+    .compare-table thead th {
+      padding: 18px 24px; font-size: 14px; font-weight: 700;
+      text-align: left; background: #FAF7F2;
+    }
+    .compare-table thead th:nth-child(2) { color: #6B6560; font-weight: 600; }
+    .compare-table thead th:nth-child(3) {
+      background: #C4623A; color: #fff;
+      text-align: center; border-radius: 0;
+    }
+    .compare-table tbody tr { border-top: 1px solid #E8E4DF; }
+    .compare-table tbody tr:hover { background: #FAF7F2; }
+    .compare-table tbody td {
+      padding: 16px 24px; font-size: 14px; vertical-align: middle;
+    }
+    .compare-table tbody td:first-child { font-weight: 500; color: #2C2C2C; }
+    .compare-table tbody td:nth-child(2) { color: #6B6560; }
+    .compare-table tbody td:nth-child(3) {
+      background: rgba(196,98,58,0.04);
+      color: #C4623A; font-weight: 600; text-align: center;
+    }
+    .check-green { color: #3D7A4A; font-size: 16px; }
+    .cross-gray  { color: #aaa; font-size: 16px; }
+
+    /* Form section */
+    .form-section { background: #FAF7F2; }
+    .form-card {
+      background: #fff; border-radius: 20px;
+      box-shadow: 0 8px 40px rgba(44,44,44,0.08);
+      padding: 40px; max-width: 680px; margin: 0 auto;
+      border: 1px solid #E8E4DF;
+    }
+    .form-title {
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      text-align: center; margin-bottom: 8px;
+    }
+    .form-sub {
+      text-align: center; color: #6B6560; font-size: 15px; margin-bottom: 32px;
+    }
+    /* Progress bar */
+    .progress-wrap { margin-bottom: 32px; }
+    .progress-labels {
+      display: flex; justify-content: space-between;
+      font-size: 12px; color: #6B6560; margin-bottom: 8px;
+    }
+    .progress-track {
+      height: 6px; background: #E8E4DF; border-radius: 99px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: #C4623A; border-radius: 99px;
+      transition: width 0.4s ease;
+    }
+    /* Step label */
+    .step-label {
+      font-family: 'Fraunces', serif; font-weight: 600;
+      font-size: 18px; margin-bottom: 6px; color: #2C2C2C;
+    }
+    .step-hint { font-size: 13px; color: #6B6560; margin-bottom: 20px; }
+    /* Visa grid */
+    .visa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    /* Form inputs */
+    .form-input {
+      width: 100%; padding: 13px 16px;
+      border: 2px solid #E8E4DF; border-radius: 10px;
+      font-family: 'DM Sans', sans-serif; font-size: 15px;
+      color: #2C2C2C; background: #FAF7F2; outline: none;
+      transition: border-color 0.18s; resize: vertical;
+    }
+    .form-input:focus { border-color: #C4623A; background: #fff; }
+    .form-input::placeholder { color: #aaa; }
+    .form-label { font-size: 13px; font-weight: 600; color: #2C2C2C; margin-bottom: 6px; display: block; }
+    .form-group { margin-bottom: 16px; }
+    /* Budget/timeline grid */
+    .budget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .timeline-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    /* Nav buttons */
+    .form-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 28px; }
+    .btn-back {
+      background: none; border: none; color: #6B6560;
+      font-family: 'DM Sans', sans-serif; font-size: 14px;
+      font-weight: 600; cursor: pointer; padding: 10px 0;
+    }
+    .btn-back:hover { color: #2C2C2C; }
+    .btn-next {
+      background: #C4623A; color: #fff; border: none;
+      border-radius: 10px; padding: 13px 32px;
+      font-family: 'DM Sans', sans-serif; font-size: 15px;
+      font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    .btn-next:hover:not(:disabled) { background: #A84E2B; }
+    .btn-next:disabled { background: #E8D5CB; cursor: not-allowed; }
+    /* Confirmation */
+    .confirm-wrap { text-align: center; padding: 20px 0; }
+    .confirm-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: #EBF5ED; display: flex; align-items: center;
+      justify-content: center; margin: 0 auto 20px;
+      font-size: 32px;
+    }
+    .confirm-title {
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: 24px; margin-bottom: 12px; color: #2C2C2C;
+    }
+    .confirm-sub { color: #6B6560; font-size: 15px; line-height: 1.65; }
+
+    /* FAQ */
+    .faq-section { background: #fff; }
+    .faq-title {
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      text-align: center; margin-bottom: 40px;
+    }
+    .faq-list { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    details.faq-item {
+      border: 1px solid #E8E4DF; border-radius: 12px;
+      overflow: hidden; background: #FAF7F2;
+    }
+    details.faq-item[open] { background: #fff; }
+    summary.faq-q {
+      padding: 18px 22px; cursor: pointer; list-style: none;
+      font-weight: 600; font-size: 15px; color: #2C2C2C;
+      display: flex; justify-content: space-between; align-items: center;
+      user-select: none;
+    }
+    summary.faq-q::-webkit-details-marker { display: none; }
+    .faq-chevron { font-size: 12px; color: #C4623A; transition: transform 0.2s; flex-shrink: 0; }
+    details[open] .faq-chevron { transform: rotate(180deg); }
+    .faq-a { padding: 0 22px 18px; font-size: 14px; color: #6B6560; line-height: 1.7; }
+
+    /* Final CTA */
+    .final-cta { background: #2C2C2C; padding: 80px 24px; text-align: center; }
+    .final-cta-inner { max-width: 600px; margin: 0 auto; }
+    .final-cta-title {
+      font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      color: #fff; margin-bottom: 16px; line-height: 1.2;
+    }
+    .final-cta-sub { color: #E8D5CB; font-size: 16px; margin-bottom: 32px; }
+    .final-cta-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* Footer */
+    footer { background: #2C2C2C; border-top: 1px solid rgba(255,255,255,0.08); padding: 32px 24px; }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-brand { display: flex; align-items: center; gap: 10px; }
+    .footer-logo-circle {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: #C4623A; display: flex; align-items: center;
+      justify-content: center; color: #fff;
+      font-family: 'Fraunces', serif; font-weight: 700; font-size: 14px;
+    }
+    .footer-wordmark { font-family: 'Fraunces', serif; font-weight: 600; font-size: 18px; color: #FAF7F2; }
+    .footer-disclaimer { font-size: 12px; color: #6B6560; max-width: 420px; line-height: 1.6; }
+    .footer-copy { font-size: 12px; color: #6B6560; }
+
+    /* Responsive */
+    @media (max-width: 720px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      .hero-card  { display: none; }
+      .how-cards  { grid-template-columns: 1fr; }
+      .trust-bar-inner { gap: 24px; }
+      .visa-grid  { grid-template-columns: 1fr; }
+      .budget-grid, .timeline-grid { grid-template-columns: 1fr; }
+      .compare-table { font-size: 13px; }
+      .compare-table tbody td, .compare-table thead th { padding: 12px 14px; }
+      .form-card { padding: 24px 18px; }
+      .hero-btns { flex-direction: column; }
+      .final-cta-btns { flex-direction: column; align-items: center; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ─── Data ─── */
+const VISA_TYPES = [
+  { icon: "💼", label: "Skilled / Points-based" },
+  { icon: "👨‍👩‍👧", label: "Family / Partner" },
+  { icon: "🎓", label: "Student" },
+  { icon: "🌏", label: "Temporary Resident" },
+  { icon: "🏡", label: "Permanent Residency" },
+  { icon: "🛡️", label: "Refugee / Protection" },
+  { icon: "🏢", label: "Employer Sponsored" },
+  { icon: "💡", label: "Business / Investor" },
+  { icon: "❓", label: "Not sure" },
+];
+
+const BUDGETS = [
+  "Under $1,000",
+  "$1,000 – $2,500",
+  "$2,500 – $5,000",
+  "$5,000 – $10,000",
+  "No budget limit",
+];
+
+const TIMELINES = [
+  "As soon as possible",
+  "Within 3 months",
+  "3 – 6 months",
+  "No rush / just exploring",
+];
+
+const COMPARE_ROWS = [
+  { criterion: "Agents to compare",    mara: "Up to 10,000+",         mira: "3 curated matches" },
+  { criterion: "Filtered by your case", mara: "❌ Manual search only", mira: "✅ AI-matched" },
+  { criterion: "Upfront quotes",        mara: "❌ Must contact each",  mira: "✅ Included" },
+  { criterion: "MARA verification",     mara: "✅ All listed",          mira: "✅ Every agent" },
+  { criterion: "Specialist matching",   mara: "❌ Not shown",           mira: "✅ Visa-type aware" },
+  { criterion: "Cost to applicant",     mara: "Free",                   mira: "Free" },
+];
+
+const FAQS = [
+  {
+    q: "What is MARA registration?",
+    a: "MARA stands for the Migration Agents Registration Authority. All registered migration agents in Australia must hold a valid MARA registration, which ensures they meet ongoing professional education and conduct requirements.",
+  },
+  {
+    q: "How much does Mira cost for applicants?",
+    a: "Mira is completely free for visa applicants. We earn a referral fee from agents when a successful match is made — you pay nothing to use this service.",
+  },
+  {
+    q: "How are agents selected for my matches?",
+    a: "Our matching algorithm considers your visa type, nationality, situation complexity, budget, and timeline to surface the three agents most likely to be a strong fit. All agents are MARA-registered and verified before joining our platform.",
+  },
+  {
+    q: "Will I be spammed by agents?",
+    a: "No. We only share your contact details with the three agents matched to your case. They will reach out with a quote, after which you remain in control of the relationship.",
+  },
+  {
+    q: "What if I'm not happy with my matches?",
+    a: "Email us at hello@mira.com.au and we'll manually review your case and find alternative matches at no charge.",
+  },
+];
+
+/* ─── Components ─── */
+
+function Nav({ onCTA }) {
+  return (
+    <nav className="nav">
+      <div className="nav-inner">
+        <a href="#" className="nav-logo">
+          <div className="logo-circle">M</div>
+          <span className="logo-wordmark">Mira</span>
+        </a>
+        <button className="nav-cta" onClick={onCTA}>Get Matched Free</button>
+      </div>
+    </nav>
+  );
+}
+
+function Hero({ onCTA }) {
+  return (
+    <section className="hero fade-up">
+      <div className="hero-inner">
+        <div>
+          <div className="hero-badge">All agents MARA-registered &amp; verified</div>
+          <h1 className="hero-h1">
+            Find the right migration agent<br />
+            <em>in 60 seconds</em>
+          </h1>
+          <p className="hero-sub">
+            Answer 5 quick questions about your visa situation. We'll match you with
+            3 MARA-registered agents who specialise in your case — and send you
+            their quotes to compare.
+          </p>
+          <div className="hero-btns">
+            <button className="cta-btn cta-btn-primary" onClick={onCTA}>
+              Get My 3 Free Quotes →
+            </button>
+            <button className="cta-btn cta-btn-outline" onClick={onCTA}>
+              See How It Works
+            </button>
+          </div>
+          <div className="trust-badges">
+            <span className="trust-badge"><span className="trust-badge-icon">✓</span> 100% free for applicants</span>
+            <span className="trust-badge"><span className="trust-badge-icon">✓</span> No spam, ever</span>
+            <span className="trust-badge"><span className="trust-badge-icon">✓</span> 60-second questionnaire</span>
+          </div>
+        </div>
+
+        <div className="hero-card slide-in">
+          <p className="hero-card-title">What you'll get</p>
+          <div className="hero-card-item">
+            <div className="hero-card-icon icon-terra">🗺️</div>
+            <div>
+              <div className="hero-card-label">Step 1</div>
+              <div className="hero-card-name">AI Pathway Summary</div>
+            </div>
+          </div>
+          <div className="hero-card-item">
+            <div className="hero-card-icon icon-green">📋</div>
+            <div>
+              <div className="hero-card-label">Step 2</div>
+              <div className="hero-card-name">Document Checklist</div>
+            </div>
+          </div>
+          <div className="hero-card-item">
+            <div className="hero-card-icon icon-blue">👤</div>
+            <div>
+              <div className="hero-card-label">Step 3</div>
+              <div className="hero-card-name">3 Matched Agents</div>
+            </div>
+          </div>
+          <div className="hero-card-item">
+            <div className="hero-card-icon icon-gray">💬</div>
+            <div>
+              <div className="hero-card-label">Step 4</div>
+              <div className="hero-card-name">Quotes to Compare</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TrustBar() {
+  return (
+    <div className="trust-bar">
+      <div className="trust-bar-inner">
+        <div className="trust-bar-item">
+          <span className="trust-bar-num">5,081</span>
+          <span>registered agents</span>
+        </div>
+        <div className="trust-bar-item" aria-hidden="true">·</div>
+        <div className="trust-bar-item">
+          <span>Every agent <strong>MARA-verified</strong></span>
+        </div>
+        <div className="trust-bar-item" aria-hidden="true">·</div>
+        <div className="trust-bar-item">
+          <span>Free for applicants</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HowItWorks({ onCTA }) {
+  return (
+    <section className="section" id="how-it-works">
+      <div className="section-inner">
+        <h2 className="how-title">Simple. Fast. Free.</h2>
+        <p className="how-sub">Three steps from confused to confident.</p>
+        <div className="how-cards">
+          <div className="how-card fade-up" style={{ animationDelay: "0.05s" }}>
+            <div className="how-step step-terra">1</div>
+            <h3 className="how-card-title">Tell us your situation</h3>
+            <p className="how-card-desc">
+              Answer 5 quick questions about your visa type, nationality, situation,
+              budget, and timeline. Takes under 60 seconds.
+            </p>
+          </div>
+          <div className="how-card fade-up" style={{ animationDelay: "0.12s" }}>
+            <div className="how-step step-green">2</div>
+            <h3 className="how-card-title">We match you with 3 agents</h3>
+            <p className="how-card-desc">
+              Our algorithm finds the three MARA-registered agents best suited
+              to your specific case from our verified network.
+            </p>
+          </div>
+          <div className="how-card fade-up" style={{ animationDelay: "0.19s" }}>
+            <div className="how-step step-dark">3</div>
+            <h3 className="how-card-title">Compare quotes and choose</h3>
+            <p className="how-card-desc">
+              Each agent sends you their quote and approach. Compare, ask questions,
+              and choose the one you're most comfortable with.
+            </p>
+          </div>
+        </div>
+        <div style={{ textAlign: "center", marginTop: "40px" }}>
+          <button className="cta-btn cta-btn-primary" onClick={onCTA}>
+            Start Now — It's Free →
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CompareTable() {
+  return (
+    <section className="section compare-section" id="compare">
+      <div className="section-inner">
+        <h2 className="compare-title">Why not just search the MARA register yourself?</h2>
+        <p className="compare-sub">You could — but here's what you'd be missing.</p>
+        <div style={{ overflowX: "auto" }}>
+          <table className="compare-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>MARA Register</th>
+                <th>Mira</th>
+              </tr>
+            </thead>
+            <tbody>
+              {COMPARE_ROWS.map((row, i) => (
+                <tr key={i}>
+                  <td>{row.criterion}</td>
+                  <td>{row.mara}</td>
+                  <td>{row.mira}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Multi-step form ─── */
+function MultiStepForm() {
+  const [step, setStep] = useState(1);
+  const [visa, setVisa] = useState("");
+  const [nationality, setNationality] = useState("");
+  const [situation, setSituation] = useState("");
+  const [budget, setBudget] = useState("");
+  const [timeline, setTimeline] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const TOTAL = 5;
+  const pct = Math.round((step / TOTAL) * 100);
+
+  function canNext() {
+    if (step === 1) return !!visa;
+    if (step === 2) return nationality.trim().length > 0;
+    if (step === 3) return situation.trim().length > 10;
+    if (step === 4) return !!budget && !!timeline;
+    if (step === 5) return name.trim() && email.includes("@") && phone.trim().length >= 6;
+    return false;
+  }
+
+  function handleSubmit() {
+    setSubmitted(true);
+  }
+
+  if (submitted) {
+    return (
+      <div className="confirm-wrap fade-up">
+        <div className="confirm-icon">✅</div>
+        <h3 className="confirm-title">You're matched!</h3>
+        <p className="confirm-sub">
+          We've received your details and will match you with 3 MARA-registered
+          agents within a few hours.<br />Check your inbox at <strong>{email}</strong>.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="progress-wrap">
+        <div className="progress-labels">
+          <span>Step {step} of {TOTAL}</span>
+          <span>{pct}%</span>
+        </div>
+        <div className="progress-track">
+          <div className="progress-fill" style={{ width: pct + "%" }} />
+        </div>
+      </div>
+
+      {step === 1 && (
+        <div className="fade-up">
+          <p className="step-label">What type of visa are you applying for?</p>
+          <p className="step-hint">Select one — you can add details in the next step.</p>
+          <div className="visa-grid">
+            {VISA_TYPES.map((v) => (
+              <button
+                key={v.label}
+                className={"option-btn" + (visa === v.label ? " selected" : "")}
+                onClick={() => setVisa(v.label)}
+              >
+                <span>{v.icon}</span>
+                <span>{v.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {step === 2 && (
+        <div className="fade-up">
+          <p className="step-label">What is your nationality?</p>
+          <p className="step-hint">This helps us match agents with relevant country experience.</p>
+          <input
+            className="form-input"
+            type="text"
+            placeholder="e.g. Indian, Filipino, British…"
+            value={nationality}
+            onChange={(e) => setNationality(e.target.value)}
+            autoFocus
+          />
+        </div>
+      )}
+
+      {step === 3 && (
+        <div className="fade-up">
+          <p className="step-label">Briefly describe your situation</p>
+          <p className="step-hint">The more detail you provide, the better your matches.</p>
+          <textarea
+            className="form-input"
+            rows={5}
+            placeholder="e.g. I am on a 500 student visa expiring in March. I want to transition to a 189 skilled visa. I have 3 years of IT experience..."
+            value={situation}
+            onChange={(e) => setSituation(e.target.value)}
+            autoFocus
+          />
+        </div>
+      )}
+
+      {step === 4 && (
+        <div className="fade-up">
+          <p className="step-label">Budget &amp; Timeline</p>
+          <p className="step-hint">Agent fees vary widely — this helps us filter appropriately.</p>
+
+          <div className="form-group">
+            <label className="form-label">What's your approximate budget for agent fees?</label>
+            <div className="budget-grid">
+              {BUDGETS.map((b) => (
+                <button
+                  key={b}
+                  className={"option-btn" + (budget === b ? " selected" : "")}
+                  onClick={() => setBudget(b)}
+                >
+                  {b}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">When do you need to lodge your application?</label>
+            <div className="timeline-grid">
+              {TIMELINES.map((t) => (
+                <button
+                  key={t}
+                  className={"option-btn" + (timeline === t ? " selected" : "")}
+                  onClick={() => setTimeline(t)}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {step === 5 && (
+        <div className="fade-up">
+          <p className="step-label">Where should we send your matches?</p>
+          <p className="step-hint">Your details are only shared with the 3 agents we match you with.</p>
+          <div className="form-group">
+            <label className="form-label">Full name</label>
+            <input
+              className="form-input"
+              type="text"
+              placeholder="Your full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Email address</label>
+            <input
+              className="form-input"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Phone number</label>
+            <input
+              className="form-input"
+              type="tel"
+              placeholder="+61 4xx xxx xxx"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
+        </div>
+      )}
+
+      <div className="form-nav">
+        {step > 1
+          ? <button className="btn-back" onClick={() => setStep(s => s - 1)}>← Back</button>
+          : <span />}
+        {step < TOTAL ? (
+          <button className="btn-next" onClick={() => setStep(s => s + 1)} disabled={!canNext()}>
+            Continue →
+          </button>
+        ) : (
+          <button className="btn-next" onClick={handleSubmit} disabled={!canNext()}>
+            Get My Matches →
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function FormSection() {
+  return (
+    <section className="section form-section" id="get-matched">
+      <div className="section-inner">
+        <div className="form-card">
+          <h2 className="form-title">Get your 3 free agent matches</h2>
+          <p className="form-sub">Takes less than 60 seconds. Completely free.</p>
+          <MultiStepForm />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FAQ() {
+  return (
+    <section className="section faq-section" id="faq">
+      <div className="section-inner">
+        <h2 className="faq-title">Frequently asked questions</h2>
+        <div className="faq-list">
+          {FAQS.map((item, i) => (
+            <details className="faq-item" key={i}>
+              <summary className="faq-q">
+                {item.q}
+                <span className="faq-chevron">▼</span>
+              </summary>
+              <p className="faq-a">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FinalCTA({ onCTA }) {
+  return (
+    <div className="final-cta">
+      <div className="final-cta-inner">
+        <h2 className="final-cta-title">Stop scrolling.<br />Start comparing.</h2>
+        <p className="final-cta-sub">
+          Thousands of people have already found their agent through Mira.
+          Your matches are one minute away.
+        </p>
+        <div className="final-cta-btns">
+          <button className="cta-btn cta-btn-dark" onClick={onCTA}>
+            Get My 3 Free Quotes →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer>
+      <div className="footer-inner">
+        <div className="footer-brand">
+          <div className="footer-logo-circle">M</div>
+          <span className="footer-wordmark">Mira</span>
+        </div>
+        <p className="footer-disclaimer">
+          Mira is an independent matching service. We are not affiliated with the
+          Migration Agents Registration Authority (MARA). All agents on our platform
+          hold current MARA registration at the time of listing.
+        </p>
+        <p className="footer-copy">&copy; {new Date().getFullYear()} Mira. All rights reserved.</p>
+      </div>
+    </footer>
+  );
+}
+
+/* ─── App ─── */
+function MiraMVP() {
+  function scrollToForm() {
+    const el = document.getElementById("get-matched");
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  }
+
+  return (
+    <div>
+      <Nav onCTA={scrollToForm} />
+      <Hero onCTA={scrollToForm} />
+      <TrustBar />
+      <HowItWorks onCTA={scrollToForm} />
+      <CompareTable />
+      <FormSection />
+      <FAQ />
+      <FinalCTA onCTA={scrollToForm} />
+      <Footer />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<MiraMVP />);
+</script>
+</body>
+</html>
