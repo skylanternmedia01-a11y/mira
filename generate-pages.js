@@ -1,0 +1,410 @@
+const fs = require('fs');
+const path = require('path');
+
+// ── 1. Parse seo-content.ts ──────────────────────────────────────────────────
+const tsContent = fs.readFileSync(
+  path.join('C:', 'Users', 'gaming rig', 'Desktop', 'seo-content.ts'),
+  'utf8'
+);
+
+// Extract the raw array literal that follows `seoPages … = `
+const match = tsContent.match(/export\s+const\s+seoPages[^=]*=\s*([\s\S]+)$/);
+if (!match) { console.error('Could not locate seoPages array'); process.exit(1); }
+
+// Safe eval via Function constructor – this is a build script reading our own file
+const seoPages = new Function('return ' + match[1])();
+console.log(`Loaded ${seoPages.length} pages from seo-content.ts`);
+
+// ── 2. Helpers ───────────────────────────────────────────────────────────────
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function slugToTitle(slug) {
+  return slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+}
+
+// ── 3. HTML template ─────────────────────────────────────────────────────────
+function buildHTML(page) {
+  const sectionsHTML = page.sections.map(s => `
+      <div class="content-section">
+        <h2 class="section-heading">${esc(s.heading)}</h2>
+        <p class="section-body">${esc(s.content)}</p>
+      </div>`).join('\n');
+
+  const faqsHTML = page.faqs.map((faq, i) => `
+        <div class="faq-item" id="faq-${i}">
+          <button class="faq-q" onclick="toggleFaq(${i})" aria-expanded="false" aria-controls="faq-ans-${i}">
+            <span>${esc(faq.q)}</span>
+            <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M5 8l5 5 5-5" stroke="#C4623A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="faq-a" id="faq-ans-${i}" role="region" hidden>
+            <p>${esc(faq.a)}</p>
+          </div>
+        </div>`).join('\n');
+
+  const relatedHTML = page.relatedSlugs.map(slug => `
+          <a href="/${slug}/" class="related-chip">${slugToTitle(slug)}</a>`).join('');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${esc(page.metaTitle)}</title>
+  <meta name="description" content="${esc(page.metaDescription)}" />
+  <link rel="canonical" href="https://mira.com.au/${esc(page.slug)}/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="${esc(page.metaTitle)}" />
+  <meta property="og:description" content="${esc(page.metaDescription)}" />
+  <meta property="og:url" content="https://mira.com.au/${esc(page.slug)}/" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #FAF7F2;
+      color: #2C2C2C;
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,247,242,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(196,98,58,0.12);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1080px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .logo-circle {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: #C4623A;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-family: 'Fraunces', serif; font-weight: 700;
+      font-size: 17px; flex-shrink: 0;
+    }
+    .logo-wordmark {
+      font-family: 'Fraunces', serif; font-weight: 600;
+      font-size: 21px; color: #2C2C2C; letter-spacing: -0.02em;
+    }
+    .nav-cta {
+      background: #C4623A; color: #fff;
+      border: none; border-radius: 8px;
+      padding: 9px 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      display: inline-block; transition: background 0.2s;
+    }
+    .nav-cta:hover { background: #A84E2B; }
+
+    /* ── Layout ── */
+    .page-wrap { max-width: 780px; margin: 0 auto; padding: 0 24px; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 72px 0 56px;
+      border-bottom: 1px solid rgba(196,98,58,0.12);
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #C4623A;
+      background: rgba(196,98,58,0.08);
+      border: 1px solid rgba(196,98,58,0.2);
+      border-radius: 100px;
+      padding: 4px 12px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: #1A1A1A;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    .hero-intro {
+      font-size: 17px;
+      color: #555;
+      line-height: 1.7;
+      max-width: 680px;
+    }
+
+    /* ── Content sections ── */
+    .content-sections { padding: 56px 0; }
+    .content-section { margin-bottom: 48px; }
+    .section-heading {
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #1A1A1A;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+    }
+    .section-body { color: #444; line-height: 1.75; }
+
+    /* ── CTA strip ── */
+    .cta-strip {
+      background: linear-gradient(135deg, #C4623A 0%, #A84E2B 100%);
+      border-radius: 16px;
+      padding: 48px 40px;
+      text-align: center;
+      margin: 0 0 56px;
+    }
+    .cta-strip-heading {
+      font-family: 'Fraunces', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .cta-strip-sub {
+      color: rgba(255,255,255,0.82);
+      font-size: 15px;
+      margin-bottom: 28px;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: #fff;
+      color: #C4623A;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 14px 32px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+
+    /* ── FAQs ── */
+    .faqs-section { margin-bottom: 56px; }
+    .faqs-heading {
+      font-family: 'Fraunces', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #1A1A1A;
+      margin-bottom: 24px;
+    }
+    .faq-item {
+      border: 1px solid rgba(196,98,58,0.15);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .faq-q {
+      width: 100%;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 18px 20px;
+      background: transparent; border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+      color: #1A1A1A; text-align: left;
+    }
+    .faq-q:hover { background: rgba(196,98,58,0.04); }
+    .faq-icon { flex-shrink: 0; transition: transform 0.25s; }
+    .faq-item.open .faq-icon { transform: rotate(180deg); }
+    .faq-a {
+      padding: 0 20px;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .faq-item.open .faq-a { max-height: 400px; padding: 0 20px 18px; }
+    .faq-a p { color: #555; font-size: 14px; line-height: 1.7; }
+
+    /* ── Related links ── */
+    .related-section { margin-bottom: 64px; }
+    .related-heading {
+      font-family: 'Fraunces', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1A1A1A;
+      margin-bottom: 16px;
+    }
+    .related-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .related-chip {
+      display: inline-block;
+      padding: 8px 16px;
+      border: 1px solid rgba(196,98,58,0.25);
+      border-radius: 100px;
+      font-size: 13px; font-weight: 500;
+      color: #C4623A;
+      text-decoration: none;
+      background: #fff;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .related-chip:hover { background: rgba(196,98,58,0.08); border-color: #C4623A; }
+
+    /* ── Footer ── */
+    .footer {
+      border-top: 1px solid rgba(196,98,58,0.12);
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .footer-inner { max-width: 1080px; margin: 0 auto; }
+    .footer-logo {
+      font-family: 'Fraunces', serif; font-weight: 600;
+      font-size: 20px; color: #2C2C2C; margin-bottom: 8px;
+    }
+    .footer-tagline { font-size: 13px; color: #888; margin-bottom: 16px; }
+    .footer-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+    .footer-links a { font-size: 13px; color: #888; text-decoration: none; }
+    .footer-links a:hover { color: #C4623A; }
+
+    /* ── Trust badges ── */
+    .trust-bar {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      margin-top: 32px;
+    }
+    .trust-badge {
+      display: flex; align-items: center; gap: 8px;
+      background: #fff;
+      border: 1px solid rgba(196,98,58,0.15);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 13px; font-weight: 500; color: #444;
+    }
+    .trust-badge svg { flex-shrink: 0; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 48px 0 40px; }
+      .cta-strip { padding: 36px 24px; }
+      .cta-strip-heading { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <div class="logo-circle">M</div>
+        <span class="logo-wordmark">Mira</span>
+      </a>
+      <a href="/#get-quotes" class="nav-cta">Get 3 Free Quotes</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- Hero -->
+    <header class="hero">
+      <span class="hero-eyebrow">Migration Agent Matching</span>
+      <h1>${esc(page.h1)}</h1>
+      <p class="hero-intro">${esc(page.intro)}</p>
+
+      <div class="trust-bar">
+        <div class="trust-badge">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#C4623A" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#C4623A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          MARA-registered agents only
+        </div>
+        <div class="trust-badge">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#C4623A" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#C4623A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          3 quotes, free &amp; no obligation
+        </div>
+        <div class="trust-badge">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#C4623A" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#C4623A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          60 seconds to match
+        </div>
+      </div>
+    </header>
+
+    <!-- Content sections -->
+    <main class="content-sections">
+${sectionsHTML}
+    </main>
+
+    <!-- CTA strip -->
+    <div class="cta-strip">
+      <div class="cta-strip-heading">Ready to find the right agent?</div>
+      <div class="cta-strip-sub">Answer 5 quick questions. Get 3 matched quotes from MARA-registered specialists. Free, no obligation.</div>
+      <a href="/#get-quotes" class="cta-btn">Get 3 Free Quotes &rarr;</a>
+    </div>
+
+    <!-- FAQs -->
+    <section class="faqs-section">
+      <h2 class="faqs-heading">Frequently Asked Questions</h2>
+${faqsHTML}
+    </section>
+
+    <!-- Related pages -->
+    ${page.relatedSlugs.length > 0 ? `<section class="related-section">
+      <h3 class="related-heading">Related guides</h3>
+      <div class="related-chips">${relatedHTML}
+      </div>
+    </section>` : ''}
+
+  </div><!-- /page-wrap -->
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">Mira</div>
+      <div class="footer-tagline">Matching Australians with the right migration agent since 2024</div>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/#how-it-works">How it works</a>
+        <a href="/#get-quotes">Get quotes</a>
+        <a href="mailto:hello@mira.com.au">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleFaq(i) {
+      var item = document.getElementById('faq-' + i);
+      var btn  = item.querySelector('.faq-q');
+      var ans  = document.getElementById('faq-ans-' + i);
+      var open = item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+      ans.hidden = !open;
+    }
+  </script>
+
+</body>
+</html>`;
+}
+
+// ── 4. Generate pages ─────────────────────────────────────────────────────────
+const outDir = __dirname;
+let created = 0;
+
+for (const page of seoPages) {
+  const dir = path.join(outDir, page.slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'index.html'), buildHTML(page), 'utf8');
+  created++;
+  process.stdout.write(`  ✓ ${page.slug}\n`);
+}
+
+console.log(`\nDone — ${created} pages generated in ${outDir}`);

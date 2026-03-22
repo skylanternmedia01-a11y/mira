@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node generate-pages.js)",
+      "Bash(npx --yes tsx --version)",
+      "Bash(npx tsx:*)",
+      "Bash(ls -d */)"
+    ]
+  }
+}
