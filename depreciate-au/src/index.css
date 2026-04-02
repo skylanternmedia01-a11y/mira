@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #1B2A4A;
+  --color-navy-light: #243558;
+  --color-teal: #2A9D8F;
+  --color-teal-dark: #238377;
+  --color-slate-dark: #1E293B;
+  --color-bg-light: #F8F9FA;
+  --color-success: #16A34A;
+  --color-warning: #D97706;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-slate-dark);
+  }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: #fff;
+  }
+}
