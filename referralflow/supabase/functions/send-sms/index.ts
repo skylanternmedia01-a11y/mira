@@ -23,11 +23,11 @@ interface SmsRequest {
 }
 
 function buildClientSms(data: SmsRequest['data']): string {
-  return `Hi ${data.clientFirstName}, ${data.senderName} from ${data.senderBusiness} has recommended you speak with ${data.partnerName} at ${data.partnerBusiness} regarding ${data.partnerProfession} services.\n\n${data.partnerName} will be in touch shortly. If you'd prefer not to be contacted, reply STOP.\n\nSent via ReferralFlow`
+  return `Hi ${data.clientFirstName}, ${data.senderName} from ${data.senderBusiness} has recommended you speak with ${data.partnerName} at ${data.partnerBusiness} regarding ${data.partnerProfession} services.\n\n${data.partnerName} will be in touch shortly. If you'd prefer not to be contacted, reply STOP.\n\nSent via Referio`
 }
 
 function buildPartnerSms(data: SmsRequest['data']): string {
-  return `New referral via ReferralFlow from ${data.senderName} at ${data.senderBusiness}: ${data.clientFirstName} ${data.clientLastName}, ${data.clientPhone}. Context: ${data.context}. View: ${data.referralLink}`
+  return `New referral via Referio from ${data.senderName} at ${data.senderBusiness}: ${data.clientFirstName} ${data.clientLastName}, ${data.clientPhone}. Context: ${data.context}. View: ${data.referralLink}`
 }
 
 async function sendTwilioSms(to: string, body: string): Promise<boolean> {

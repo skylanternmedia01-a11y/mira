@@ -174,7 +174,7 @@ export function Profile() {
       const pngUrl = canvas.toDataURL('image/png')
       const a = document.createElement('a')
       a.href = pngUrl
-      a.download = `referralflow-qr-${professional?.username ?? 'code'}.png`
+      a.download = `referio-qr-${professional?.username ?? 'code'}.png`
       a.click()
     }
     img.src = url

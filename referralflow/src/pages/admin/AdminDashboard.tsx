@@ -155,7 +155,7 @@ export function AdminDashboard() {
               </div>
               <div>
                 <p className="text-white font-bold text-lg leading-tight">Admin Access</p>
-                <p className="text-blue-200 text-xs">ReferralFlow Dashboard</p>
+                <p className="text-blue-200 text-xs">Referio Dashboard</p>
               </div>
             </div>
 

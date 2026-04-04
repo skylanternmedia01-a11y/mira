@@ -102,7 +102,7 @@ export function Signup() {
       <div className="w-full max-w-md">
         {/* Logo / Brand */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-primary tracking-tight">ReferralFlow</h1>
+          <h1 className="text-3xl font-bold text-primary tracking-tight">Referio</h1>
           <p className="mt-2 text-sm text-slate-500">Create your professional account</p>
         </div>
 

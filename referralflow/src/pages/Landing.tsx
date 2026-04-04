@@ -44,7 +44,7 @@ export function Landing() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2">
             <span className="text-xl font-bold text-primary tracking-tight">
-              ReferralFlow
+              Referio
             </span>
           </Link>
           <Link
@@ -154,7 +154,7 @@ export function Landing() {
             No lock-in.
           </h2>
           <p className="text-gray-500 text-base leading-relaxed mb-10 max-w-lg mx-auto">
-            ReferralFlow is free for professionals. Sign up, connect with
+            Referio is free for professionals. Sign up, connect with
             partners, and start sending referrals today — no credit card, no
             contracts.
           </p>
@@ -170,7 +170,7 @@ export function Landing() {
       {/* Footer */}
       <footer className="bg-surface border-t border-gray-100 px-4 sm:px-6 py-10">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-          <span className="text-base font-bold text-primary">ReferralFlow</span>
+          <span className="text-base font-bold text-primary">Referio</span>
           <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-500">
             <Link
               to="/privacy"
@@ -185,14 +185,14 @@ export function Landing() {
               Terms
             </Link>
             <a
-              href="mailto:hello@referralflow.app"
+              href="mailto:hello@referio.app"
               className="min-h-[48px] flex items-center hover:text-primary transition-colors"
             >
-              hello@referralflow.app
+              hello@referio.app
             </a>
           </nav>
           <p className="text-xs text-gray-400">
-            &copy; {new Date().getFullYear()} ReferralFlow
+            &copy; {new Date().getFullYear()} Referio
           </p>
         </div>
       </footer>

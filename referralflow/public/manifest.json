@@ -1,6 +1,6 @@
 {
-  "name": "ReferralFlow",
-  "short_name": "ReferralFlow",
+  "name": "Referio",
+  "short_name": "Referio",
   "description": "Professional referral network. Send tracked referrals in 15 seconds.",
   "start_url": "/app/dashboard",
   "display": "standalone",

@@ -98,7 +98,7 @@ export function ConnectPage() {
       professional_id: targetPro.id,
       type: 'connection_request',
       title: 'New referral partner',
-      body: `${professional.full_name} (${professional.business_name}) connected with you on ReferralFlow.`,
+      body: `${professional.full_name} (${professional.business_name}) connected with you on Referio.`,
       link: `/app/partners`,
       read: false,
     })
@@ -139,7 +139,7 @@ export function ConnectPage() {
             to="/"
             className="inline-flex items-center justify-center w-full rounded-lg bg-primary text-white font-semibold min-h-[48px] hover:opacity-90 transition-opacity mt-2"
           >
-            Go to ReferralFlow
+            Go to Referio
           </Link>
         </div>
       </div>
@@ -154,7 +154,7 @@ export function ConnectPage() {
 
         {/* Branding */}
         <div className="text-center">
-          <span className="text-xl font-bold text-primary tracking-tight">ReferralFlow</span>
+          <span className="text-xl font-bold text-primary tracking-tight">Referio</span>
         </div>
 
         {/* Profile card */}
@@ -294,7 +294,7 @@ export function ConnectPage() {
         <p className="text-center text-xs text-gray-400">
           Powered by{' '}
           <Link to="/" className="text-primary hover:underline">
-            ReferralFlow
+            Referio
           </Link>
         </p>
       </div>

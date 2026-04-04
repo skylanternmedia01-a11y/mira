@@ -1,4 +1,4 @@
-const CACHE_NAME = 'referralflow-v1'
+const CACHE_NAME = 'referio-v1'
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',

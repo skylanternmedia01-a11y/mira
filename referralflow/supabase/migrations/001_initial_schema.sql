@@ -1,4 +1,4 @@
--- ReferralFlow Initial Schema
+-- Referio Initial Schema
 -- Run this in Supabase SQL Editor
 
 -- Users / Professionals
